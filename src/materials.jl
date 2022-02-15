@@ -95,8 +95,8 @@ It returns the path associated to the material database
 **return**  pth::String
 """
 function get_materials_path()
-  tail = length(joinpath("src","ParMech.jl"))
-  pth = chop(pathof(ParMech), head = 0, tail = tail)*"materials"
+  tail = length(joinpath("src","MORFEInvariantManifold.jl"))
+  pth = chop(pathof(MORFEInvariantManifold), head = 0, tail = tail)*"materials"
   return pth
 end
 

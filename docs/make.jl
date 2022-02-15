@@ -11,7 +11,7 @@ makedocs(
         "Home" => "index.md",
         "Overview" => "overview.md",
         "Tutorials" => "tutorials.md",
-        "Supported Formats" => "supported_formats.md",
+        "Supported Mesh Formats" => "supported_formats.md",
         "Integrators" => "integrators.md",
         "Library" => "library_all.md",
         "Authors" => "authors.md",

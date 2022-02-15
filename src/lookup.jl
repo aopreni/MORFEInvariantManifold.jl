@@ -1,5 +1,5 @@
 """
-Overview: collections of routines for O(n) access to data
+Overview: collections of routines for O(p) access to data
 """
 
 """

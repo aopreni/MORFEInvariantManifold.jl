@@ -1,4 +1,4 @@
-module MORFEInvariantManifold
+module MorfeInvariantManifold
 
   using JLD2
   using AsterReader

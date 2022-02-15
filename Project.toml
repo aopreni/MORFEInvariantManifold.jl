@@ -3,6 +3,18 @@ uuid = "060db207-bbc3-4615-a80f-18dcf6475df0"
 authors = ["Andrea Opreni", "Adrien Martin", "Alessandra Vizzaccaro", "Cyril Touzé", "Attilio Frangi"]
 version = "0.1.0"
 
+[deps]
+Arpack = "7d9fca2a-8960-54d3-9f78-7d1dccf2cb97"
+AsterReader = "cb1a753d-6b7b-52e3-9bfe-57d99d445c39"
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+FEMQuad = "be8e8821-3f6f-54c2-987c-d2773c3a52cb"
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
+
 [compat]
 julia = "1"
 

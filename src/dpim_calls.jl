@@ -28,28 +28,42 @@ function MORFE_mech_autonomous(mesh_file,domains_list,materials,
                                α,β,
                                Φₗᵢₛₜ,style,max_order,neig=0,nls=0)
   # initialize output folder
+  println("Initializing directories")
   odir = make_output_dir("tmp")
   odir_C, odir_W, odir_f, odir_M = structure_odir(odir,0)
-  # basic data structures
-  mesh = read_mesh(mesh_file, domains_list, boundaries_list, materials, constrained_dof, bc_vals)
+  # read the mesh file and initialise the grid data structure
+  println("Reading mesh")
+  mesh = read_mesh(mesh_file, domains_list, boundaries_list, 
+                   materials, constrained_dof, bc_vals)
+  # compute the node-to-node connectivity in CSC format and store it 
+  # in its associated data structure
+  println("Computing nodal connectivity")
   n2n = NodalConnectivity(mesh)
-  U = Field(mesh,3)
-  # matrices
+  # initialise a dummy field to store dofs ordering and static solutions
+  U = Field(mesh,dim)
+  # initialise sparseCSC matrices 
+  println("initializing M C K")
   K = init_symCSC(mesh,U,n2n,0,"r")
   M = deepcopy(K)
   C = deepcopy(K)
+  # assembly mass (M) and stiffness (K) matrices through numerical integration. 
+  # The damping matrix is obtained through linear combination of K and M.
+  println("Assemblying M C K")
   assembly_MCK!(mesh,U,M,C,K,α,β)
   K = Symmetric(K,:L)
   M = Symmetric(M,:L)
   C = Symmetric(C,:L)
-  #
+  # check maximum number of computer eigenvalues
   if (neig==0)
     neig = maximum(Φₗᵢₛₜ)
   end
-  # compute eigenvalues
+  # compute eigenvalues and convert them from complex to 
+  # real valued since the governing equations yield
+  # purely real quantities
   λ, ϕ = eigs(K, M, nev=neig, which=:SM)
   λ = real(λ)
   ϕ = real(ϕ)
+  # mass-normalise the modes
   mass_normalization!(ϕ,M,neig)
   # export eigenvalues
   export_eig(mesh, U, λ, ϕ, odir, 0)
@@ -68,26 +82,28 @@ function MORFE_mech_autonomous(mesh_file,domains_list,materials,
   sys_mat = init_symCSC(mesh,U,n2n,ndofs,"c")
   sys_mat = Symmetric(sys_mat,:L)
   sys_res = Array{ComplexF64}(undef,neq+ndofs)
-  # Init parametrisation structrure
+  # Init parametrisation structrure and MATCONT rdyn format
   Cp = [Parametrisation() for i in 0:max_order]
   rdyn = init_rdyn(ndofs)
-  #
+  # if the fixed point is not the origin, then 
+  # initialise also a zero order parametrisation
   if (nls>0)
     initialize_parametrisation!(Cp[1],0,ndofs,U.neq)
   end
   # impose identity tangency with linear eigenvalues
   initialize_parametrisation!(Cp[2],1,ndofs,U.neq)
   identity_tangency!(Cp[2],nm,neq,Φₗᵢₛₜ,ϕ,ω₀,ζ₀,U)
-  #
+  # initialise the realification matrix [I,I,iI,-iI]
   rmat = init_realification_matrix(ndofs)
+  # realify first order mappings and reduced dynamics and store output
   Wr = zeros(ComplexF64,(U.neq*2,Cp[2].nc))
   fr = zeros(ComplexF64,(ndofs,Cp[2].nc))
   realification!(Cp[2],Wr,fr,1,ndofs,U.neq,rmat)
   export_data!(Cp[2],Wr,fr,1,ndofs,U,M,ϕ,neig,odir_C,odir_W,odir_f,odir_M)
-  #
+  # we export the reduced dynamics in MATCONT compatible format
   p = 1
   fill_rdyn!(rdyn,ndofs,fr,Cp[p+1],p)
-  # higher orders
+  # higher orders developments
   for p = 2:max_order
     #
     println("order: "*string(p))
@@ -95,18 +111,22 @@ function MORFE_mech_autonomous(mesh_file,domains_list,materials,
     initialize_parametrisation!(Cp[p+1],p,ndofs,U.neq)
     #
     cc = 1
+    # assembly all right hand sides associated to the homological 
+    # equations of a given order p
     recursive_assembly!(Cp,ndofs,p,mesh,U,Cic,cc)
+    # solve the homological equations
     solve_homological!(Cp,ndofs,p,sys_mat,sys_rhs,sys_res,Cic,style,M,C,K)
-    #
+    # realify and export mappings and reduced dynamics
     Wr = zeros(ComplexF64,(U.neq*2,Cp[p+1].nc))
     fr = zeros(ComplexF64,(ndofs,Cp[p+1].nc))
     realification!(Cp[p+1],Wr,fr,p,ndofs,U.neq,rmat)
     export_data!(Cp[p+1],Wr,fr,p,ndofs,U,M,ϕ,neig,odir_C,odir_W,odir_f,odir_M)
-    #
+    # append the reduced dynamics of a given order to the reduced dynamics
+    # in MATCONT format
     fill_rdyn!(rdyn,ndofs,fr,Cp[p+1],p)
     #
   end
-  #
+  # export the reduced dynamics in MATCONT format
   save_matcont_rdyn(rdyn,ndofs,odir)
   #
   return Cp, rdyn
@@ -150,30 +170,38 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   println("Initializing directories")
   odir = make_output_dir("tmp")
   odir_C, odir_W, odir_f, odir_M = structure_odir(odir,0)
-  # basic data structures
+  # read the mesh file and initialise the grid data structure
   println("Reading mesh")
   mesh = read_mesh(mesh_file, domains_list, boundaries_list, materials, constrained_dof, bc_vals)
+  # compute the node-to-node connectivity in CSC format and store it 
+  # in its associated data structure
   println("Computing nodal connectivity")
   n2n = NodalConnectivity(mesh)
+  # initialise a dummy field to store dofs ordering and static solutions
   U = Field(mesh,3)
-  # matrices
+  # initialise sparseCSC matrices 
   println("initializing M C K")
   K = init_symCSC(mesh,U,n2n,0,"r")
   M = deepcopy(K)
   C = deepcopy(K)
+  # assembly mass (M) and stiffness (K) matrices through numerical integration. 
+  # The damping matrix is obtained through linear combination of K and M.
   println("Assemblying M C K")
   assembly_MCK!(mesh,U,M,C,K,α,β)
   K = Symmetric(K,:L)
   M = Symmetric(M,:L)
   C = Symmetric(C,:L)
-  #
+  # check maximum number of computer eigenvalues
   if (neig==0)
     neig = maximum(Φₗᵢₛₜ)
   end
-  # compute eigenvalues
+  # compute eigenvalues and convert them from complex to 
+  # real valued since the governing equations yield
+  # purely real quantities
   λ, ϕ = eigs(K, M, nev=neig, which=:SM)
   λ = real(λ)
   ϕ = real(ϕ)
+  # mass-normalise the modes
   mass_normalization!(ϕ,M,neig)
   # export eigenvalues
   export_eig(mesh, U, λ, ϕ, odir, 0)
@@ -192,59 +220,66 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   sys_mat = init_symCSC(mesh,U,n2n,ndofs,"c")
   sys_mat = Symmetric(sys_mat,:L)
   sys_res = Array{ComplexF64}(undef,neq+ndofs)
-  # Init parametrisation structrure
+  # Init parametrisation structrure and MATCONT rdyn format
   Cp = [Parametrisation() for i in 0:max_order_a]
   rdyn = init_rdyn(ndofs)
+  # if the fixed point is not the origin, then 
+  # initialise also a zero order parametrisation
   if (nls>0)
     initialize_parametrisation!(Cp[1],0,ndofs,U.neq)
   end
   # impose identity tangency with linear eigenvalues
   initialize_parametrisation!(Cp[2],1,ndofs,U.neq)
   identity_tangency!(Cp[2],nm,neq,Φₗᵢₛₜ,ϕ,ω₀,ζ₀,U)
-  #
+  # initialise the realification matrix [I,I,iI,-iI]
   rmat = init_realification_matrix(ndofs)
+  # realify first order mappings and reduced dynamics and store output
   Wr = zeros(ComplexF64,(U.neq*2,Cp[2].nc))
   fr = zeros(ComplexF64,(ndofs,Cp[2].nc))
   realification!(Cp[2],Wr,fr,1,ndofs,U.neq,rmat)
   export_data!(Cp[2],Wr,fr,1,ndofs,U,M,ϕ,neig,odir_C,odir_W,odir_f,odir_M)
-  #
+  # we export the reduced dynamics in MATCONT compatible format
   p = 1
   fill_rdyn!(rdyn,ndofs,fr,Cp[p+1],p)
-  # higher orders
+  # higher orders developments of the autonomous problem
   for p = 2:max_order_a
     #
     println("Order: "*string(p))
-    #
     Cic = zeros(Int64,p)
     initialize_parametrisation!(Cp[p+1],p,ndofs,U.neq,'0')
     #
     cc = 1
+    # assembly all right hand sides associated to the homological 
+    # equations of a given order p
     recursive_assembly!(Cp,ndofs,p,mesh,U,Cic,cc)
+    # solve the homological equations
     solve_homological!(Cp,ndofs,p,sys_mat,sys_rhs,sys_res,Cic,style,M,C,K)
-    #
+    # realify and export mappings and reduced dynamics
     Wr = zeros(ComplexF64,(U.neq*2,Cp[p+1].nc))
     fr = zeros(ComplexF64,(ndofs,Cp[p+1].nc))
     realification!(Cp[p+1],Wr,fr,p,ndofs,U.neq,rmat)
     export_data!(Cp[p+1],Wr,fr,p,ndofs,U,M,ϕ,neig,odir_C,odir_W,odir_f,odir_M)
-    #
+    # append the reduced dynamics of a given order to the reduced dynamics
+    # in MATCONT format
     fill_rdyn!(rdyn,ndofs,fr,Cp[p+1],p)
     #
   end
   #
   Wr = nothing
   fr = nothing
-  #
+  # store the parametrisations computed for each excitation frequency
   Cp_na = Dict()
   #
   for ith_Ω = 1:size(Ω_list)[1]
     # initialise new output directory
     odir_C_c, odir_W_c, odir_f_c, odir_M_c = structure_odir(odir,ith_Ω,'c')
     odir_C_s, odir_W_s, odir_f_s, odir_M_s = structure_odir(odir,ith_Ω,'s')
-    #
+    # initialise the new parametrisation structure
     Cp⁺ = [Parametrisation() for i in 0:max_order_na]
-    #
+    # append to the reduced dynamics the auxiliary variables associated to
+    # each excitation frequency
     append_rdyn_frequency!(rdyn,ndofs,ith_Ω)
-    # 
+    # extract forcing frequency and its eigenvalue
     Ω = Ω_list[ith_Ω]*ω₀[1]
     η = +im*Ω
     for p = 0:max_order_na

@@ -1,14 +1,6 @@
 # MORFEInvariantManifold.jl
-This package exploits the direct parametrisation method for invariant manifolds to generate accurate **reduced models** of structures subjected to geometric nonlinearities obeying to the following formulation:
+This package exploits the direct parametrisation method for invariant manifolds to generate accurate **reduced models** of structures subjected to geometric nonlinearities.
 
-$$\mathbf{M}\ddot{\mathbf{U}}+\mathbf{C}\dot{\mathbf{U}}+\mathbf{F(\mathbf{U})}= \mathbf{T}(t),$$
-with $\mathbf{M}$ mass matrix, $\mathbf{C}$ damping matrix, $\mathbf{U}$ nodal displacement vector, $\mathbf{F(\mathbf{U})}$ internal force vector, and $\mathbf{T}(t)$ external forcing vector. If a finite elasticity formulation is used, then the internal force vector is a polynomial function of the displacement field and it can be exactly decomposed as:
-
-$$\mathbf{F(\mathbf{U})}=\mathbf{K}\mathbf{U}+\mathbf{G(\mathbf{U},\mathbf{U})}+\mathbf{H(\mathbf{U},\mathbf{U},\mathbf{U})},$$
-where $\mathbf{K}$ is the stiffness matrix, $\mathbf{G(\mathbf{U},\mathbf{U})}$ is the quadratic nonlinearity vector, and $\mathbf{H(\mathbf{U},\mathbf{U},\mathbf{U})}$ is the cubic nonlinearity vector. Damping is added to the mode in form of Rayleigh damping:
-
-$$\mathbf{C} = \alpha\mathbf{M} + \beta \mathbf{K},$$
-with $\alpha$ and $\beta$ non-negative scalars. 
 > The packages allows parametrizing also the unforced and undamped version of the model to compute the backbone of the system
 One particoular feature of this package is that it embeds its own finite element solver. This implies that upon installation the user can create its personalised database for materials and meshes. Furthermore, we provide output and post-process routines compatible with well established continuation packages as **MatCont** for refined analysis on the resulting reduced models. 
 

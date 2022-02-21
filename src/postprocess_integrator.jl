@@ -50,10 +50,13 @@ end
 #
 #
 #
-# function MORFE_frc_modal(param_dir,out_sol,nfreq,::Type{Val{:MATCONT}},tag=1)
-#   #
-#   p_a = readdlm(param_dir*"/comb_a_0/monomials.txt")
-#   m_a = readdlm(param_dir*"/manifold_a_0/psi.txt")
-#   #
-# end
+function MORFE_frc_modal(param_dir,out_sol,nfreq,::Type{Val{:MATCONT}},tag=1)
+  #
+  p_a = readdlm(param_dir*"/comb_a_0/monomials.txt")
+  m_a = readdlm(param_dir*"/manifold_a_0/psi.txt")
+  #
+  
+
+  
+end
 #

@@ -22,7 +22,7 @@ end
 It loads the data structure from the database
 - name : name of the material to load
 """
-function load_material(name::String)
+function MORFE_load_material(name::String)
   pth = joinpath(get_materials_path(),name*".jld2")
   data = load(pth)
   return data["material"]
@@ -38,7 +38,7 @@ It adds an isotropic material to the internal database of the package.
 - ν = Poisson's ratio
 **return**  *nothing*
 """
-function add_material(name::String, ρ::Float64, E::Float64, ν::Float64)
+function MORFE_add_material(name::String, ρ::Float64, E::Float64, ν::Float64)
   #
   pth = get_materials_path()
   #
@@ -77,7 +77,7 @@ It adds an anisotropic material to the internal database of the package.
 - Dᵢⱼₖₗ = fourth order elasticity tensor
 **return**  *nothing*
 """
-function add_material(name::String, ρ::Float64, Dᵢⱼₖₗ::Matrix{Float64})
+function MORFE_add_material(name::String, ρ::Float64, Dᵢⱼₖₗ::Matrix{Float64})
   #
   pth = get_materials_path()
   #
@@ -105,7 +105,7 @@ end
 It lists all materials in the database.
 **return**  *nothing*
 """
-function list_materials()
+function MORFE_list_materials()
   pth = get_materials_path()
   tail = length(".jld2")
   files = readdir(pth)
@@ -122,7 +122,7 @@ It delets a material in the database.
 - name = name of the material to delete
 **return**  *nothing*
 """
-function delete_material(name::String)
+function MORFE_delete_material(name::String)
   pth = joinpath(get_materials_path(),name)*".jld2"
   try
     rm(pth)

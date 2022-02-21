@@ -4,6 +4,8 @@ This package exploits the direct parametrisation method for invariant manifolds 
 > The packages allows parametrizing also the unforced and undamped version of the model to compute the backbone of the system
 One particoular feature of this package is that it embeds its own finite element solver. This implies that upon installation the user can create its personalised database for materials and meshes. Furthermore, we provide output and post-process routines compatible with well established continuation packages as **MatCont** for refined analysis on the resulting reduced models. 
 
+> **Warning**: the package is under development, hence it is subjected to frequent updates
+
 ## Do I need this package?
 
 The method implemented in this packages provides accurate reduced models of structures that operate at resonance, hence making it amazing for accelerated computation of periodic orbits of finite element models of structures. Furthermore, numerical coefficients estimated by the presented approach are typically less prone to instabilities compared to techniques serving the same purpose e.g., POD-Galerkin hyper reduction techniques, hence making the computation of stability and bifurcation points more accurate. As a result, the presented method proves amazing for the design of systems that operate at resonance as for instance MEMS micromirrros, gyroscopes, and resonators. If your mechanical structure does not operate at resonance, then this method may serve little use to you.

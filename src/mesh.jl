@@ -432,7 +432,7 @@ function import_mesh!(mesh::Grid, mesh_file::String,
     iΩ.Set = [:TE4, :T10, :HE8, :H20, :H27, :PE6, :P15, :P18]
     iΩ.Senn = Ve_nn
     iΩ.ne = neΩ[:,d]
-    iΩ.mat = load_material(mat[d])
+    iΩ.mat = MORFE_load_material(mat[d])
     iΩ.eskip = zeros(Int64,iΩ.Sen)
     #
     nn = 0
@@ -642,7 +642,7 @@ function import_mesh!(mesh::Grid, mesh_file::String,
     iΩ.Set = [:TE4, :T10, :HE8, :H20, :H27, :PE6, :P15, :P18]
     iΩ.Senn = Ve_nn
     iΩ.ne = neΩ[:,i]
-    iΩ.mat = load_material(mat[i])
+    iΩ.mat = MORFE_load_material(mat[i])
     iΩ.eskip = zeros(Int64,iΩ.Sen)
     #
     nn = 0

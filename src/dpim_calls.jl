@@ -42,7 +42,7 @@ function MORFE_mech_autonomous(mesh_file,domains_list,materials,
   # initialise a dummy field to store dofs ordering and static solutions
   U = Field(mesh,dim)
   # initialise sparseCSC matrices 
-  println("initializing M C K")
+  println("Initializing M C K")
   K = init_symCSC(mesh,U,n2n,0,"r")
   M = deepcopy(K)
   C = deepcopy(K)
@@ -180,7 +180,7 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   # initialise a dummy field to store dofs ordering and static solutions
   U = Field(mesh,3)
   # initialise sparseCSC matrices 
-  println("initializing M C K")
+  println("Initializing M C K")
   K = init_symCSC(mesh,U,n2n,0,"r")
   M = deepcopy(K)
   C = deepcopy(K)
@@ -200,6 +200,7 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
       end
     end
   end
+  println("Computed eigenvalues "*string(neig))
   # compute eigenvalues and convert them from complex to 
   # real valued since the governing equations yield
   # purely real quantities

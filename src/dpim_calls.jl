@@ -200,7 +200,6 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
       end
     end
   end
-  println("Computed eigenvalues "*string(neig))
   # compute eigenvalues and convert them from complex to 
   # real valued since the governing equations yield
   # purely real quantities

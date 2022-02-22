@@ -395,8 +395,12 @@ function export_M(Ψ,Υ,odir,M,Φ,neig)
   io1 = open(odir*"/upsilon.txt","a")
   io2 = open(odir*"/psi.txt","a")
   #
-  var_Υ = M*Ψ
-  var_Ψ = M*Υ
+  println(size(Υ))
+  println(size(Ψ))
+  println(M.data.m)
+  #
+  var_Υ = M*Υ
+  var_Ψ = M*Ψ
   #
   for i = 1:neig
     #

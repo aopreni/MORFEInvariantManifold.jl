@@ -194,6 +194,11 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   # check maximum number of computer eigenvalues
   if (neig==0)
     neig = maximum(Φₗᵢₛₜ)
+    for i = 1:size(Ω_list)[1]
+      if (maximum(κ_modes[i])>neig)
+        neig = maximum(κ_modes[i])
+      end
+    end
   end
   # compute eigenvalues and convert them from complex to 
   # real valued since the governing equations yield

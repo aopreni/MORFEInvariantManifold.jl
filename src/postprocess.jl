@@ -313,7 +313,7 @@ function export_data!(Cp,Wr,fr,p,ndofs,U,M,Φ,neig,
     export_C(odir_C,coeff,ndofs)
     export_W(Ψ,Υ,coeff,odir_W)
     export_f(rdyn,ndofs,odir_f)
-    export_M(Ψ,Υ,odir_M,M,Φ,neig)
+    export_M(Wr,i,odir_M,M,Φ,neig)
     #
   end
   #
@@ -364,7 +364,7 @@ function export_data_veps!(Cp,Wr,fr,p,ndofs,U,M,Φ,neig,
     export_C(odir_C_c,coeff,ndofs)
     export_W(Ψ,Υ,coeff,odir_W_c)
     export_f(rdyn,ndofs,odir_f_c)
-    export_M(Ψ,Υ,odir_M_c,M,Φ,neig)
+    export_M(Wr,i,odir_M_c,M,Φ,neig)
     #
     fill_mapping_s!(Ψ,Υ,Wr,i,U)
     fill_rdyn_s!(rdyn,fr,i,ndofs)
@@ -372,7 +372,7 @@ function export_data_veps!(Cp,Wr,fr,p,ndofs,U,M,Φ,neig,
     export_C(odir_C_s,coeff,ndofs)
     export_W(Ψ,Υ,coeff,odir_W_s)
     export_f(rdyn,ndofs,odir_f_s)
-    export_M(Ψ,Υ,odir_M_s,M,Φ,neig)
+    export_M(Wr,i,odir_M_s,M,Φ,neig)
     #
   end
   #
@@ -390,26 +390,21 @@ it saves the mass-wieighted projections of the mappings onto the computed modal 
 - Φ : eigenmodes
 - neig : number of computed eigenmodes
 """
-function export_M(Ψ,Υ,odir,M,Φ,neig)
+function export_M(Wr,comb,odir,M,Φ,neig)
   #
   io1 = open(odir*"/upsilon.txt","a")
   io2 = open(odir*"/psi.txt","a")
   #
-  println(typeof(Υ))
-  println(size(Υ))
-  println(size(Ψ))
-  println(M.data.m)
-  #
-  var_Υ = M*Υ
-  var_Ψ = M*Ψ
+  var_Υ = M*Wr[1:M.data.m,comb]
+  var_Ψ = M*Wr[M.data.m+1:2*M.data.m,comb]
   #
   for i = 1:neig
     #
-    Υi = real(transpose(Φ[:,i])*var_Υ)
-    Ψi = real(transpose(Φ[:,i])*var_Ψ)
+    Υ = real(transpose(Φ[:,i])*var_Υ)
+    Ψ = real(transpose(Φ[:,i])*var_Ψ)
     #
-    write(io1,string(real(Υi))*" ")
-    write(io2,string(real(Ψi))*" ")
+    write(io1,string(real(Υ))*" ")
+    write(io2,string(real(Ψ))*" ")
     #
   end
   #

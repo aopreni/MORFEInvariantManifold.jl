@@ -151,8 +151,8 @@ function append_rdyn_frequency!(rdyn,ndofs,ith_Ω)
   var1 = "z"*string(ndofs+2*ith_Ω-1)
   var2 = "z"*string(ndofs+2*ith_Ω)
   #
-  eq1 = var1*"' = "*var1*" + "*freq*"*"*var2*" - "*var1*"*("*var1*"^2+"*var2*"^2"*")"
-  eq2 = var2*"' = "*var2*" - "*freq*"*"*var1*" - "*var2*"*("*var1*"^2+"*var2*"^2"*")"
+  eq1 = var1*"' = "*var1*" - "*freq*"*"*var2*" - "*var1*"*("*var1*"^2+"*var2*"^2"*")"
+  eq2 = var2*"' = "*var2*" + "*freq*"*"*var1*" - "*var2*"*("*var1*"^2+"*var2*"^2"*")"
   #
   push!(rdyn,eq1)
   push!(rdyn,eq2)

@@ -395,13 +395,13 @@ function export_M(Wr,comb,odir,M,Φ,neig,scale=1.0)
   io1 = open(odir*"/upsilon.txt","a")
   io2 = open(odir*"/psi.txt","a")
   #
-  var_Υ = M*Wr[1:M.data.m,comb].*scale
-  var_Ψ = M*Wr[M.data.m+1:2*M.data.m,comb].*scale
+  var_Υ = M*Wr[1:M.data.m,comb]
+  var_Ψ = M*Wr[M.data.m+1:2*M.data.m,comb]
   #
   for i = 1:neig
     #
-    Υ = real(transpose(Φ[:,i])*var_Υ)
-    Ψ = real(transpose(Φ[:,i])*var_Ψ)
+    Υ = real(transpose(Φ[:,i])*var_Υ)*scale
+    Ψ = real(transpose(Φ[:,i])*var_Ψ)*scale
     #
     write(io1,string(real(Υ))*" ")
     write(io2,string(real(Ψ))*" ")

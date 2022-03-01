@@ -230,9 +230,9 @@ function check_resonances!(Cp,σ,ndofs,style,resonant_modes)
         resonant_modes[i] = true
         if (style=='r')
           if (i <= Int(ndofs/2))
-            resonant_modes[i+nm] = true
+            resonant_modes[i+Int(ndofs/2)] = true
           else
-            resonant_modes[i-nm] = true
+            resonant_modes[i-Int(ndofs/2)] = true
           end
         end
       end

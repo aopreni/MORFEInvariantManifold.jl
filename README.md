@@ -21,6 +21,6 @@ We plan to add it to the registered Julia package as soon as possible.
 ## Citing this work
 
 A reference paper on the developed code is in preparation. For the moment, if you use this package for developing your projects, please cite these works:
-* A. Opreni, A. Vizzaccaro, C. Touzé, A. Frangi. [*High order direct parametrisation of invariant manifolds for model order reduction of finite element structures: application to generic forcing terms and parametrically excited systems*](https://assets.researchsquare.com/files/rs-1359763/v1_covered.pdf?c=1645456305), Research Square, 2022
+* A. Opreni, A. Vizzaccaro, C. Touzé, A. Frangi. [*High order direct parametrisation of invariant manifolds for model order reduction of finite element structures: application to generic forcing terms and parametrically excited systems*](https://www.researchsquare.com/article/rs-1359763/v1), Research Square, 1359763, 2022
 * A. Vizzaccaro, A. Opreni, L. Salles, A. Frangi, C. Touzé. [*High order direct parametrisation of invariant manifolds for model order reduction of finite element structures: application to large amplitude vibrations and unconvering of a folding point*](https://arxiv.org/abs/2109.10031). arXiv, 2109.10031, 2021
 

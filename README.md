@@ -14,7 +14,7 @@ The method implemented in this packages provides accurate reduced models of stru
 
 This package is currently an unregistered Julia package, hence to add it to your packages use the URL of the repository:
 
-`] add https://github.com/aopreni/MORFEInvariantManifold.jl`
+`] add https://github.com/MORFEproject/MORFEInvariantManifold.jl`
 
 We plan to add it to the registered Julia package as soon as possible.
 

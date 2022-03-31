@@ -18,6 +18,10 @@ This package is currently an unregistered Julia package, hence to add it to your
 
 We plan to add it to the registered Julia package as soon as possible.
 
+## Test Examples
+
+[*Repository with meshes and tests*](https://github.com/aopreni/MORFEInvariantManifold_examples)
+
 ## Citing this work
 
 A reference paper on the developed code is in preparation. For the moment, if you use this package for developing your projects, please cite these works:

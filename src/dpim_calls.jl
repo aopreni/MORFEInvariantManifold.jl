@@ -128,7 +128,7 @@ function MORFE_mech_autonomous(mesh_file,domains_list,materials,
   end
   # export the reduced dynamics in MATCONT format
   save_matcont_rdyn(rdyn,ndofs,odir)
-  save_matcont_rdyn_automatic(rdyn,ndofs,outdir)
+  save_matcont_rdyn_automatic(rdyn,ndofs,odir)
   #
   return odir, Cp, rdyn
   #

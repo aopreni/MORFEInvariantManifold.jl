@@ -20,54 +20,54 @@ function save_matcont_rdyn_automatic(rdyn,ndofs,outdir)
   var_file = open(odir*"system.txt","w")
   #
   write(var_file,
-  "function out = DNF_example\n
-  out{1} = @init;\n
-  out{2} = @fun_eval;\n
-  out{3} = [];\n
-  out{4} = [];\n
-  out{5} = [];\n
-  out{6} = [];\n
-  out{7} = [];\n
-  out{8} = [];\n
-  out{9} = [];\n
-  out{10}= @userf1;\n
-  end\n
-  % --------------------------------------------------------------------------\n
-  function [tspan,y0,options] = init\n
-  end\n
-  % --------------------------------------------------------------------------\n
-  function jac = jacobian(t,x,w,beta)\n
-  end\n
-  % --------------------------------------------------------------------------\n
-  function jacp = jacobianp(t,x,w,beta)\n
-  end\n
-  % --------------------------------------------------------------------------\n
-  function hess = hessians(t,kmrgd,w,beta)\n
-  end\n
-  % --------------------------------------------------------------------------\n
-  function hessp = hessiansp(t,kmrgd,w,beta)\n
-  end\n
-  %---------------------------------------------------------------------------\n
-  function tens3  = der3(t,kmrgd,w,beta)\n
-  end\n
-  %---------------------------------------------------------------------------\n
-  function tens4  = der4(t,kmrgd,w,beta)\n
-  end\n
-  %---------------------------------------------------------------------------\n
-  function tens5  = der5(t,kmrgd,w,beta)\n
-  end\n
-  %\n
-  % --------------------------------------------------------------------------\n
-  function dydt = fun_eval(t,x,mu)\n")
+  "function out = DNF_example
+  out{1} = @init;
+  out{2} = @fun_eval;
+  out{3} = [];
+  out{4} = [];
+  out{5} = [];
+  out{6} = [];
+  out{7} = [];
+  out{8} = [];
+  out{9} = [];
+  out{10}= @userf1;
+  end
+  % --------------------------------------------------------------------------
+  function [tspan,y0,options] = init
+  end
+  % --------------------------------------------------------------------------
+  function jac = jacobian(t,x,w,beta)
+  end
+  % --------------------------------------------------------------------------
+  function jacp = jacobianp(t,x,w,beta)
+  end
+  % --------------------------------------------------------------------------
+  function hess = hessians(t,kmrgd,w,beta)
+  end
+  % --------------------------------------------------------------------------
+  function hessp = hessiansp(t,kmrgd,w,beta)
+  end
+  %---------------------------------------------------------------------------
+  function tens3  = der3(t,kmrgd,w,beta)
+  end
+  %---------------------------------------------------------------------------
+  function tens4  = der4(t,kmrgd,w,beta)
+  end
+  %---------------------------------------------------------------------------
+  function tens5  = der5(t,kmrgd,w,beta)
+  end
+  %
+  % --------------------------------------------------------------------------
+  function dydt = fun_eval(t,x,mu)")
 
   for i = 1:ndofs
-    write(var_file,"z"*string(i)*"="*"x("*string(i)*")")
+    write(var_file,"z"*string(i)*"="*"x("*string(i)*")\n")
   end
 
-  write(var_file,"dydt=[")
+  write(var_file,"dydt=[\n")
 
   for i = 1:ndofs
-    write(var_file,rdyn[i][5:end])
+    write(var_file,rdyn[i][6:end]*"\n")
   end
 
   write(var_file,"]")

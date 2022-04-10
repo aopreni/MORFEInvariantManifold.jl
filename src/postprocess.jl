@@ -58,7 +58,7 @@ function save_matcont_rdyn_automatic(rdyn,ndofs,outdir)
   end
   %
   % --------------------------------------------------------------------------
-  function dydt = fun_eval(t,x,mu)")
+  function dydt = fun_eval(t,x,mu)\n")
 
   for i = 1:ndofs
     write(var_file,"z"*string(i)*"="*"x("*string(i)*")\n")

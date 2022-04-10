@@ -17,7 +17,7 @@ function save_matcont_rdyn_automatic(rdyn,ndofs,outdir)
   #
   mkdir(odir)
   #
-  var_file = open(odir*"system.m","w")
+  var_file = open(odir*"MORFEsystem.m","w")
   #
   write(var_file,
   "function out = DNF_example

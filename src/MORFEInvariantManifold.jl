@@ -10,6 +10,7 @@ module MORFEInvariantManifold
   using Arpack
   using DelimitedFiles
   using MAT
+  using MATLAB
 
   export MORFE_add_material, MORFE_list_materials, MORFE_delete_material, MORFE_load_material
   export MORFE_mech_autonomous, MORFE_mech_nonautonomous

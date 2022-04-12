@@ -14,7 +14,7 @@ module MORFEInvariantManifold
 
   export MORFE_add_material, MORFE_list_materials, MORFE_delete_material, MORFE_load_material
   export MORFE_mech_autonomous, MORFE_mech_nonautonomous
-  export MORFE_backbone_modal
+  export MORFE_integrate_rdyn_backbone, MORFE_compute_backbone_modal
 
   # collection of parametrisation calls
   include("dpim_calls.jl")

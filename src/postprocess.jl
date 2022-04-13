@@ -5,8 +5,8 @@ Overview: post process subroutines
 
 
 """
-> save_matcont_rdyn_automatic_veps(rdyn,ndofs,outdir)
-It saves the autonomous reduced dynamics in a format suitable for matcont GUI usage.
+> save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
+It saves the autonomous reduced dynamics in a format suitable for matcont.
 - rdyn : reduced dynamics in matcont format style
 - ndofs : number of degrees of freedom
 - outdir : output directory
@@ -94,7 +94,7 @@ end
 
 """
 > save_matcont_rdyn_automatic(rdyn,ndofs,outdir)
-It saves the autonomous reduced dynamics in a format suitable for matcont GUI usage.
+It saves the autonomous reduced dynamics in a format suitable for matcont.
 - rdyn : reduced dynamics in matcont format style
 - ndofs : number of degrees of freedom
 - outdir : output directory

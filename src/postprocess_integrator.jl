@@ -32,7 +32,6 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
       param *= ";w"*string(i) * " = " * string(param_init[i+1+nΩ])
     end
     param *= ";"
-    println(param)
     #
     mat"""
     warning off
@@ -45,7 +44,6 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
     tfin = $time_integration_length;
     """
     eval_string(param)
-    println(control_parameters)
     mat"""
     ndofs = size(X0);
     ndofs = ndofs(1);

@@ -18,7 +18,10 @@ function save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
   mkdir(odir)
   #
   var_file = open(odir*"MORFEsystem.m","w")
-  control_parameters = "mu,beta"
+  control_parameters = "mu"
+  for i = 1:size(Ω_list)[1]
+    control_parameters *= ",beta"*string(i)
+  end
   for i = 1:size(Ω_list)[1]
     control_parameters *= ",w"*string(i)
   end

@@ -22,9 +22,8 @@ function save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
   for i = 1:size(Ω_list)[1]
     control_parameters *= ",w"*string(i)
   end
-  #
-  write(var_file,
-  "function out = DNF_example
+
+  core_file = ("function out = DNF_example
   out{1} = @init;
   out{2} = @fun_eval;
   out{3} = [];
@@ -64,7 +63,8 @@ function save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
   % --------------------------------------------------------------------------
   function dydt = fun_eval(t,x,%s)",control_parameters,control_parameters,control_parameters,control_parameters,
                                     control_parameters,control_parameters,control_parameters,control_parameters)
-
+  #
+  write(var_file,core_file)
 
   for i = 1:ndofs
     write(var_file,"z"*string(i)*"="*"x("*string(i)*");\n")

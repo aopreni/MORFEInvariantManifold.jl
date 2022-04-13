@@ -324,7 +324,7 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   end
   #
   save_matcont_rdyn_nonautonomous(rdyn,ndofs,odir,Ω_list)
-  save_matcont_rdyn_automatic(rdyn,ndofs+size(Ω_list)[1]*2,odir)
+  save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,odir)
   #
   return odir, Cp, Cp_na, rdyn
   #

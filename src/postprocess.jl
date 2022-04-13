@@ -61,17 +61,17 @@ function save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
   end
   %
   % --------------------------------------------------------------------------
-  function dydt = fun_eval(t,x,$control_parameters)"
+  function dydt = fun_eval(t,x,$control_parameters)\n"
   #
   write(var_file,core_file)
 
-  for i = 1:ndofs
+  for i = 1:ndofs+size(Ω_list)[1]
     write(var_file,"z"*string(i)*"="*"x("*string(i)*");\n")
   end
 
   write(var_file,"dydt=[\n")
 
-  for i = 1:ndofs
+  for i = 1:ndofs+size(Ω_list)[1]
     write(var_file,rdyn[i][6:end]*";\n")
   end
 

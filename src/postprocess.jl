@@ -23,7 +23,7 @@ function save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
     control_parameters *= ",w"*string(i)
   end
 
-  core_file = ("function out = DNF_example
+  core_file = "function out = DNF_example
   out{1} = @init;
   out{2} = @fun_eval;
   out{3} = [];
@@ -39,30 +39,29 @@ function save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
   function [tspan,y0,options] = init
   end
   % --------------------------------------------------------------------------
-  function jac = jacobian(t,x,%s)
+  function jac = jacobian(t,x,$control_parameters)
   end
   % --------------------------------------------------------------------------
-  function jacp = jacobianp(t,x,%s)
+  function jacp = jacobianp(t,x,$control_parameters)
   end
   % --------------------------------------------------------------------------
-  function hess = hessians(t,kmrgd,%s)
+  function hess = hessians(t,kmrgd,$control_parameters)
   end
   % --------------------------------------------------------------------------
-  function hessp = hessiansp(t,kmrgd,%s)
+  function hessp = hessiansp(t,kmrgd,$control_parameters)
   end
   %---------------------------------------------------------------------------
-  function tens3  = der3(t,kmrgd,%s)
+  function tens3  = der3(t,kmrgd,$control_parameters)
   end
   %---------------------------------------------------------------------------
-  function tens4  = der4(t,kmrgd,%s)
+  function tens4  = der4(t,kmrgd,$control_parameters)
   end
   %---------------------------------------------------------------------------
-  function tens5  = der5(t,kmrgd,%s)
+  function tens5  = der5(t,kmrgd,$control_parameters)
   end
   %
   % --------------------------------------------------------------------------
-  function dydt = fun_eval(t,x,%s)",control_parameters,control_parameters,control_parameters,control_parameters,
-                                    control_parameters,control_parameters,control_parameters,control_parameters)
+  function dydt = fun_eval(t,x,$control_parameters)"
   #
   write(var_file,core_file)
 

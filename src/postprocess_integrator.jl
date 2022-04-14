@@ -56,8 +56,7 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
     ")
     #"""
 
-    param = "[t,y]=ode45(hls{2},[0,tfin],...s
-                X0,options,"*control_parameters*");"
+    param = "[t,y]=ode45(hls{2},[0,tfin],X0,options,"*control_parameters*");"
     eval_string(ms,param)
 
     #mat"""
@@ -83,7 +82,7 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
              t,y,...
              ["*control_parameters*"],[active_pars],ntst,ncol,...
              tolerance);"
-    eval_string(param)
+    eval_string(ms,param)
 
     #mat"""
     eval_string(ms,"

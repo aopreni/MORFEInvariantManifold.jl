@@ -288,6 +288,7 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
     # extract forcing frequency and its eigenvalue
     Ω = Ω_list[ith_Ω]*ω₀[1]
     η = +im*Ω
+    println("NA freq:",η)
     # non-autonomous parametrisation starts at order zero, and 
     for p = 0:max_order_na
       #

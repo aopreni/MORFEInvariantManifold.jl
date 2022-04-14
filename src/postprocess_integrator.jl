@@ -33,7 +33,9 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
     end
     param *= ";"
     #
-    mat"""
+    #mat"""
+    ms = MSession();
+    eval_string(ms,"
     warning off
     addpath(genpath('./MatCont7p3')) 
     addpath($analysis_folder)
@@ -42,41 +44,49 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
     init 
     X0   = $X0;
     tfin = $time_integration_length;
-    """
-    eval_string(param)
-    mat"""
+    ")
+    #"""
+    eval_string(ms,param)
+    #mat"""
+    eval_string(ms,"
     ndofs = size(X0);
     ndofs = ndofs(1);
     hls=feval(@MORFEsystem); 
     options=odeset('RelTol',1e-8);
-    """
+    ")
+    #"""
 
     param = "[t,y]=ode45(hls{2},[0,tfin],...s
                 X0,options,"*control_parameters*");"
-    eval_string(param)
+    eval_string(ms,param)
 
-    mat"""
+    #mat"""
+    eval_string(ms,"
     x1 = y(end,:);
     [vl,pk]=findpeaks(y(:,1));
     period=t(pk(end))-t(pk(end-1));
-    """
+    ")
+    #"""
 
     param = "[t,y] = ode45(hls{2},[0 period],x1,options,"*control_parameters*");"
-    eval_string(param)
+    eval_string(ms,param)
 
-    mat"""
+    #mat"""
+    eval_string(ms,"
     active_pars=$cont_param; 
     ncol=$ncol; 
     ntst=$ntst; 
     tolerance=1e-4;
-    """
+    ")
+    #"""
     param = "[x0,v0]=initOrbLC(@MORFEsystem,...
              t,y,...
              ["*control_parameters*"],[active_pars],ntst,ncol,...
              tolerance);"
     eval_string(param)
 
-    mat"""
+    #mat"""
+    eval_string(ms,"
     opt=contset; 
     opt=contset(opt,'MaxNumPoints',$MaxNumPoints); 
     opt=contset(opt, 'InitStepsize' , 0.1); 
@@ -87,7 +97,7 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
     opt=contset(opt,'VarTolerance', 1e-6);
     opt=contset(opt,'ActiveParams', active_pars);
     [xlcc,vlcc,slcc,hlcc,flcc]=cont(@limitcycle,x0,v0,opt); 
-  
+    %
     %FRF=[];
     %omega=[];
     %for i=1:size(xlcc,2)
@@ -97,16 +107,17 @@ function MORFE_integrate_rdyn_frc(analysis_name,zero_amplitude,harmonics_init,pa
     %   FRF(i)=max(x1);
     %   FRFv(i)=max(y1);
     %end
-    
+    %
     %figure(1)
     %hold on
     %plot(omega,FRF)
-  
+    %
     save($analysis_output,'xlcc','ncol','ntst')
-    """
+    ")
+    #"""
     
     #
-    return nothing
+    return ms
     #
   end
 

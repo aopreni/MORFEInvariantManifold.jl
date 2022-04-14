@@ -3,6 +3,174 @@ Overview: post process subroutines
 """
 
 
+
+"""
+> save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
+It saves the autonomous reduced dynamics in a format suitable for matcont.
+- rdyn : reduced dynamics in matcont format style
+- ndofs : number of degrees of freedom
+- outdir : output directory
+"""
+function save_matcont_rdyn_automatic_veps(rdyn,ndofs,Ω_list,outdir)
+  #
+  odir = outdir*"/matcont_automatic/"
+  #
+  mkdir(odir)
+  #
+  var_file = open(odir*"MORFEsystem.m","w")
+  control_parameters = "mu"
+  for i = 1:size(Ω_list)[1]
+    control_parameters *= ",beta"*string(i)
+  end
+  for i = 1:size(Ω_list)[1]
+    control_parameters *= ",w"*string(i)
+  end
+
+  core_file = "function out = DNF_example
+  out{1} = @init;
+  out{2} = @fun_eval;
+  out{3} = [];
+  out{4} = [];
+  out{5} = [];
+  out{6} = [];
+  out{7} = [];
+  out{8} = [];
+  out{9} = [];
+  out{10}= @userf1;
+  end
+  % --------------------------------------------------------------------------
+  function [tspan,y0,options] = init
+  end
+  % --------------------------------------------------------------------------
+  function jac = jacobian(t,x,$control_parameters)
+  end
+  % --------------------------------------------------------------------------
+  function jacp = jacobianp(t,x,$control_parameters)
+  end
+  % --------------------------------------------------------------------------
+  function hess = hessians(t,kmrgd,$control_parameters)
+  end
+  % --------------------------------------------------------------------------
+  function hessp = hessiansp(t,kmrgd,$control_parameters)
+  end
+  %---------------------------------------------------------------------------
+  function tens3  = der3(t,kmrgd,$control_parameters)
+  end
+  %---------------------------------------------------------------------------
+  function tens4  = der4(t,kmrgd,$control_parameters)
+  end
+  %---------------------------------------------------------------------------
+  function tens5  = der5(t,kmrgd,$control_parameters)
+  end
+  %
+  % --------------------------------------------------------------------------
+  function dydt = fun_eval(t,x,$control_parameters)\n"
+  #
+  write(var_file,core_file)
+
+  for i = 1:ndofs+size(Ω_list)[1]*2
+    write(var_file,"z"*string(i)*"="*"x("*string(i)*");\n")
+  end
+
+  write(var_file,"dydt=[\n")
+
+  for i = 1:ndofs+size(Ω_list)[1]*2
+    write(var_file,rdyn[i][6:end]*";\n")
+  end
+
+  write(var_file,"];\n")
+  write(var_file,"end")
+
+  #
+  close(var_file)
+  #
+  return nothing
+  #
+end
+
+
+
+
+
+"""
+> save_matcont_rdyn_automatic(rdyn,ndofs,outdir)
+It saves the autonomous reduced dynamics in a format suitable for matcont.
+- rdyn : reduced dynamics in matcont format style
+- ndofs : number of degrees of freedom
+- outdir : output directory
+"""
+function save_matcont_rdyn_automatic(rdyn,ndofs,outdir)
+  #
+  odir = outdir*"/matcont_automatic/"
+  #
+  mkdir(odir)
+  #
+  var_file = open(odir*"MORFEsystem.m","w")
+  #
+  write(var_file,
+  "function out = DNF_example
+  out{1} = @init;
+  out{2} = @fun_eval;
+  out{3} = [];
+  out{4} = [];
+  out{5} = [];
+  out{6} = [];
+  out{7} = [];
+  out{8} = [];
+  out{9} = [];
+  out{10}= @userf1;
+  end
+  % --------------------------------------------------------------------------
+  function [tspan,y0,options] = init
+  end
+  % --------------------------------------------------------------------------
+  function jac = jacobian(t,x,mu)
+  end
+  % --------------------------------------------------------------------------
+  function jacp = jacobianp(t,x,mu)
+  end
+  % --------------------------------------------------------------------------
+  function hess = hessians(t,kmrgd,mu)
+  end
+  % --------------------------------------------------------------------------
+  function hessp = hessiansp(t,kmrgd,mu)
+  end
+  %---------------------------------------------------------------------------
+  function tens3  = der3(t,kmrgd,mu)
+  end
+  %---------------------------------------------------------------------------
+  function tens4  = der4(t,kmrgd,mu)
+  end
+  %---------------------------------------------------------------------------
+  function tens5  = der5(t,kmrgd,mu)
+  end
+  %
+  % --------------------------------------------------------------------------
+  function dydt = fun_eval(t,x,mu)\n")
+
+  for i = 1:ndofs
+    write(var_file,"z"*string(i)*"="*"x("*string(i)*");\n")
+  end
+
+  write(var_file,"dydt=[\n")
+
+  for i = 1:ndofs
+    write(var_file,rdyn[i][6:end]*";\n")
+  end
+
+  write(var_file,"];\n")
+  write(var_file,"end")
+
+  #
+  close(var_file)
+  #
+  return nothing
+  #
+end
+
+
+
+
 """
 > save_matcont_rdyn(rdyn,ndofs,outdir)
 It saves the non-autonomous reduced dynamics in a format suitable for matcont GUI usage.
@@ -122,11 +290,11 @@ function fill_rdyn_veps!(rdyn,ndofs,fr,Cp,p,ith_Ω)
 
     for d = 1:ndofs
       #
-      if (abs(real(fr[d,c]))>1e-100)
+      if (abs(imag(fr[d,c]))>1e-100)
         rdyn[d] *= " + "*string(-2.0*imag(fr[d,c]))*monomial*"*"*β*"*"*var1
       end
       #
-      if (abs(imag(fr[d,c]))>1e-100)
+      if (abs(real(fr[d,c]))>1e-100)
         rdyn[d] *= " + "*string(+2.0*real(fr[d,c]))*monomial*"*"*β*"*"*var2
       end
       #
@@ -173,7 +341,10 @@ function init_rdyn(ndofs)
     rdyn[i] = "z"*string(i)*"' = "
   end
   # add unfolding parameter to first dofs identity-tangent to a modal displacement
-  rdyn[2] *= "+mu*z2"
+  nm = Int(ndofs/2)
+  for i = 1:nm
+    rdyn[nm+i] *= "+mu*z"*string(nm+i)
+  end
   #
   return rdyn
   #

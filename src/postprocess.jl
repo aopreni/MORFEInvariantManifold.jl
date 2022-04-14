@@ -291,12 +291,12 @@ function fill_rdyn_veps!(rdyn,ndofs,fr,Cp,p,ith_Ω)
     for d = 1:ndofs
       #
       if (abs(real(fr[d,c]))>1e-100)
-        println(string(-2.0*imag(fr[d,c])))
+        println(fr[d,c])
         rdyn[d] *= " + "*string(-2.0*imag(fr[d,c]))*monomial*"*"*β*"*"*var1
       end
       #
       if (abs(imag(fr[d,c]))>1e-100)
-        println(string(+2.0*real(fr[d,c])))
+        println(fr[d,c])
         rdyn[d] *= " + "*string(+2.0*real(fr[d,c]))*monomial*"*"*β*"*"*var2
       end
       #

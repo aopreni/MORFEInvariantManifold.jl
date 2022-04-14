@@ -35,6 +35,7 @@ function solve_homological_veps!(η,Cp,Cp⁺,ndofs,p,sys_mat,sys_rhs,
     end
     #
     check_resonances!(Cp,σ⁺,ndofs,style,resonant_modes)
+    println(resonant_modes)
     assembly_sys_mat!(Cp,sys_mat.data,M.data,C.data,K.data,σ⁺,resonant_modes,ndofs)
     assembly_sys_rhs_veps!(Cp,Cp⁺,sys_rhs,sys_res,M.data,C.data,i,p,ndofs,σ⁺,resonant_modes)
     #

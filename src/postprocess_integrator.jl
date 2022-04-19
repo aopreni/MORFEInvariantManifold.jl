@@ -271,7 +271,7 @@ function MORFE_compute_frc_modal(analysis_name,Ω_list,analysis_number=1)
   #
   nc = size(comb)[1]
   ndofs = size(comb)[2]
-  nΩ = size(Ω_list)[1]
+  nΩ = 2*size(Ω_list)[1]
   neig = size(maps)[2]
   #
   data = matread(po_dir)

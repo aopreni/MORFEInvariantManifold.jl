@@ -10,7 +10,7 @@ One particoular feature of this package is that it embeds its own finite element
 
 The method implemented in this packages provides accurate reduced models of structures that operate at resonance, hence making it amazing for accelerated computation of periodic orbits of finite element models of structures. Furthermore, numerical coefficients estimated by the presented approach are typically less prone to instabilities compared to techniques serving the same purpose e.g., POD-Galerkin hyper reduction techniques, hence making the computation of stability and bifurcation points more accurate. As a result, the presented method proves amazing for the design of systems that operate at resonance as for instance MEMS micromirrros, gyroscopes, and resonators. If your mechanical structure does not operate at resonance, then this method may serve little use to you.
 
-## Intallation
+## Installation
 
 This package is currently an unregistered Julia package, hence to add it to your packages use the URL of the repository:
 
@@ -20,7 +20,7 @@ We plan to add it to the registered Julia package as soon as possible.
 
 ## Test Examples
 
-[*Repository with meshes and tests*](https://github.com/aopreni/MORFEInvariantManifold_examples)
+[*Repository with meshes and tests*](https://github.com/MORFEproject/MORFEInvariantManifold_examples)
 
 ## Citing this work
 

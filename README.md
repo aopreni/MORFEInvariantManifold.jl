@@ -6,10 +6,6 @@ One particoular feature of this package is that it embeds its own finite element
 
 > **Warning**: the package is under development, hence it is subjected to frequent updates
 
-> **Warning**: I use this repo to make temporary changes and play a bit. Please refer to the https://github.com/MORFEproject/MORFEInvariantManifold_examples for the code that runs examples from out papers.
-
-> **Warning**: this package is based on the one I developed for our papers. If you want the one I actually use to run the examples, please message me or any of my co-authors. Till the two main papers are officially published this code allows running pretty much only the examples of the paper.
-
 
 ## Do I need this package?
 

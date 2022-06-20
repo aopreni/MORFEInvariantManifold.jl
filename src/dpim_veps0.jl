@@ -34,6 +34,7 @@ function solve_homological!(Cp,ndofs,p,sys_mat,sys_rhs,sys_res,ic,
       check_resonances!(Cp,σ,ndofs,style,resonant_modes)
       #
       assembly_sys_mat!(Cp,sys_mat.data,M.data,C.data,K.data,σ,resonant_modes,ndofs)
+      
       assembly_sys_rhs!(Cp,sys_rhs,sys_res,M.data,C.data,i,p,ndofs,σ,resonant_modes)
       #
       sys_res = sparse(sys_mat)\sys_rhs
@@ -168,25 +169,9 @@ function assembly_sys_mat!(Cp,sys_mat,M,C,K,σ,resonant_modes,ndofs)
   end
   #
   for d = 1:ndofs
-    if (!resonant_modes[d])
-      pos = sys_mat.colptr[K.m+d]
-      sys_mat.nzval[pos] = 1.0
-    end
-  end
-  #
-  for d = 1:nm
-    if (resonant_modes[d])
-      if (resonant_modes[d+nm])
-        pos = sys_mat.colptr[K.m+d] + 1
-        sys_mat.nzval[pos] = 1.0
-      end
-    end
-  end
-  #
-  for d = 1:ndofs
     if (resonant_modes[d])
       if (d<=nm)
-        λ = conj(Cp[2].f[d,d])
+        λ = Cp[2].f[d+nm,d+nm]
       else
         λ = Cp[2].f[d-nm,d-nm]
       end
@@ -200,6 +185,22 @@ function assembly_sys_mat!(Cp,sys_mat,M,C,K,σ,resonant_modes,ndofs)
       pos = sys_mat.colptr[K.m+d]
       sys_mat.nzval[pos] = 1.0
       #
+    end
+  end
+  #
+  for d = 1:nm
+    if (resonant_modes[d])
+      if (resonant_modes[d+nm])
+        pos = sys_mat.colptr[K.m+d] + nm
+        sys_mat.nzval[pos] = 1.0
+      end
+    end
+  end
+  #
+  for d = 1:ndofs
+    if (!resonant_modes[d])
+      pos = sys_mat.colptr[K.m+d]
+      sys_mat.nzval[pos] = 1.0
     end
   end
   #

@@ -91,6 +91,7 @@ function MORFE_mech_autonomous(mesh_file,domains_list,materials,
   # initialise also a zero order parametrisation
   if (nls>0)
     initialize_parametrisation!(Cp[1],0,ndofs,U.neq)
+    add_stat_2_param(Cp[1], U)
   end
   # impose identity tangency with linear eigenvalues
   initialize_parametrisation!(Cp[2],1,ndofs,U.neq)
@@ -237,6 +238,7 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   # initialise also a zero order parametrisation
   if (nls>0)
     initialize_parametrisation!(Cp[1],0,ndofs,U.neq)
+    add_stat_2_param(Cp[1], U)
   end
   # impose identity tangency with linear eigenvalues
   initialize_parametrisation!(Cp[2],1,ndofs,U.neq)

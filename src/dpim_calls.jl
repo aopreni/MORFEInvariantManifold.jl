@@ -187,8 +187,6 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   println("Initializing M C K")
   K = init_symCSC(mesh,U,n2n,0,"r")
   M = deepcopy(K)
-  # compute static equilibrium
-  compute_static_equilibrium!(K, M, C, U, mesh, nls, vector_rotation, odir)
   C = deepcopy(K)
   # assembly mass (M) and stiffness (K) matrices through numerical integration. 
   # The damping matrix is obtained through linear combination of K and M.
@@ -196,6 +194,8 @@ function MORFE_mech_nonautonomous(mesh_file,domains_list,materials,
   assembly_MCK!(mesh,U,M,C,K,α,β)
   K = Symmetric(K,:L)
   M = Symmetric(M,:L)
+  # compute static equilibrium
+  compute_static_equilibrium!(K, M, C, U, mesh, nls, vector_rotation, odir)
   C = Symmetric(C,:L)
   # check maximum number of computer eigenvalues
   if (neig==0)

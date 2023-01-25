@@ -51,5 +51,7 @@ module MORFEInvariantManifold
   include("dpim_veps1.jl")
   # integrators post process routines
   include("postprocess_integrator.jl")
+  # nonlinear static functions
+  include("nl_static.jl")
 
 end # module
